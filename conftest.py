@@ -5,6 +5,7 @@ from endpoints.register_dfile import RegisterDFile
 from endpoints.validate import Validate
 from endpoints.login_satelit import LoginSatelit
 from endpoints.login_dfile import LoginDfile
+from endpoints.forgot_pw import Forgot
 @pytest.fixture()
 def create_session():
     yield requests.Session()
@@ -28,3 +29,7 @@ def login_satelit(create_session):
 @pytest.fixture()
 def login_dfile(create_session):
     yield LoginDfile(session=create_session)
+
+@pytest.fixture()
+def forgot_pw(create_session):
+    yield Forgot(session=create_session)

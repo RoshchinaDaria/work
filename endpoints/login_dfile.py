@@ -1,6 +1,7 @@
 import requests
 from env_setup import Endpoints
 
+
 class LoginDfile:
 
     def __init__(self, session: requests.Session):
@@ -8,15 +9,14 @@ class LoginDfile:
         self.jwttoken = None
         # self.headers = {"Authorization": f"Bearer {self.jwttoken}"}
 
-
     def login_dfile(self):
         headers = {'Content-Type': 'application/json'}
         params = {
-    "device_id": "70c9c4e9ad15088c46561c0310ad14c6750f1518",
-  "password": "Qwerty123!",
-  "source": "d.file-tax.net",
-  "username": "teвцstj@mail.com"
-}
+            "device_id": "70c9c4e9ad15088c46561c0310ad14c6750f1518",
+            "password": "Qwerty123!",
+            "source": "d.file-tax.net",
+            "username": "teвцstj@mail.com"
+        }
         response = self.session.post(f"{Endpoints.BASE_URL_DFILE}/oauth/token", headers=headers, json=params)
         self.jwttoken = response.json()['jwt_token']
 
@@ -32,3 +32,16 @@ class LoginDfile:
             assert response.json()['funnel'] == 'A0', f"actual email: {response.json()['funnel']}"
             assert response.json()['first_name'] == 'drherh', f"actual email: {response.json()['first_name']}"
             assert response.json()['last_name'] == 'srhrh', f"actual email: {response.json()['last_name']}"
+
+    def login_dfile_bad(self):
+        headers = {'Content-Type': 'application/json'}
+        params = {
+            "device_id": "70c9c4e9ad15088c46561c0310ad14c6750f1518",
+            "password": "Qwerty123!",
+            "source": "d.file-tax.net",
+            "username": "teвцstdhfjsghj@gmail.com"
+        }
+        response = self.session.post(f"{Endpoints.BASE_URL_DFILE}/oauth/token", headers=headers, json=params)
+        assert response.status_code == 400, f"actual status code: {response.status_code}"
+        assert response.json() == {
+            "msg": "Email or Username / Password combination not found."}, f"actual response body: {response.json()}"

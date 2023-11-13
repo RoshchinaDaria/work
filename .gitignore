@@ -4,3 +4,5 @@ venv
 **/pyreport.html
 **/result.xml
 .idea
+**/logfile.log
+**/allure-results

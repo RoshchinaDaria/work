@@ -2,6 +2,7 @@ import requests
 from support.common import generate_email
 from env_setup import Endpoints
 
+
 class RegisterSatelit:
 
     def __init__(self, session: requests.Session):
@@ -30,14 +31,26 @@ class RegisterSatelit:
             response = self.session.post(f"{Endpoints.BASE_URL_DFILE}/oauth/exchange/token", headers=headers, json=body)
             self.jwttoken = response.json()['jwt_token']
 
-
     def users_me(self):
         self._exchange_token()
         if self.jwttoken:
             response = self.session.get(f"{Endpoints.BASE_URL_DFILE}/users/me", headers=self.headers)
-            assert response.json()['email'] == f"dariatestik+{self.email_generator}@gmail.com", f"actual email: {response.json()['email']}"
+            assert response.json()[
+                       'email'] == f"dariatestik+{self.email_generator}@gmail.com", f"actual email: {response.json()['email']}"
 
-
-
-
-
+    def registered_email_satelit(self):
+        headers = {'Content-Type': 'application/json'}
+        params = {
+            "email": "dariatestik+456344456@gmail.com",
+            "device_id": "70c9c4e9ad15088c46561c0310ad14c6750f1518",
+            "password": "Qwerty123!",
+            "product_focus": "extension",
+            "source": "stage.irsextension.online"
+        }
+        response = self.session.post(f"{Endpoints.BASE_URL_IRSEXTENSION}/api/register", headers=headers, json=params)
+        assert response.status_code == 200, f"actual status code: {response.status_code}"
+        assert response.json() == {
+            "status": False,
+            "error": "User with this email or username already exists.",
+            "token": None
+        }, f"actual response body: {response.json()}"
