@@ -1,0 +1,32 @@
+name: automated tests
+
+on : [push]
+
+jobs:
+  auto-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Pytest
+        run: |
+          pip install -r requirements.txt
+          pytest
+
+      - name: Install rsync 📚
+        run: |
+          sudo apt-get install rsync
+
+      - name: Move Pyreport to Public Directory
+        run: |
+          mkdir public
+          mv pyreport.html public/
+
+      - name: Deploy to Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.PIPELINES_TOKEN }}
+          branch: gh-pages
+          folder: public
+          clean: true
