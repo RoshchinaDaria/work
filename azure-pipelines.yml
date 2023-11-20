@@ -1,3 +1,19 @@
+parameters:
+- name: subscription
+  displayName: Scopes
+  type: string
+  default: regression
+  values:
+  - smoke
+  - regression
+
+schedules:
+- cron: "0 0 * * *"
+  displayName: Daily midnight build
+  branches:
+    include:
+    - master
+
 trigger:
 - master
 
@@ -21,8 +37,12 @@ steps:
 
 - task: CmdLine@2
   inputs:
-    script: |
-      pytest
+    ${{ if contains(parameters.subscription, 'smoke') }}:
+      script: |
+        pytest -m smoke
+    ${{ if contains(parameters.subscription, 'regression') }}:
+      script: |
+        pytest
   displayName: 'pytest'
   continueOnError: true
 
