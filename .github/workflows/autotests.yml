@@ -26,7 +26,7 @@ jobs:
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          token: ${{ secrets.PIPELINES_TOKEN }}
+          token: ${{ secrets.TOKENACTIONS }}
           branch: gh-pages
           folder: public
           clean: true
