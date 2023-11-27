@@ -1,8 +1,0 @@
-pytest
-requests
-python-dotenv
-psycopg2
-jsonschema
-pytest-pyreport
-pytest-rerunfailures
-allure-pytest
